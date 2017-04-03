@@ -1,17 +1,8 @@
 <?php
-	require_once ('libs/MysqliDb.php');
-  
-	$hostname = "localhost";
-	$username = "bridgecon1";
-	$password = "Sp1d3rm@n";
-	$database = "test";
-	
-	$feedback = "";
-  
-	$score_data = array();
-  
-	$db = new MysqliDb ($hostname, $username, $password, $database);
-	$db->connect();
+	require_once ('libs/config.php');
+  	
+	/*Checks to see if a new score set has been submitted and
+	inserts scores info into the database*/
 	
 	if (isset($_POST['add_score']))
 	{
@@ -36,101 +27,15 @@
 			$feedback =  'Oops, something went wrong! ' . $db->getLastError();
 		}
 	}
+	
+	include_once('header.php');
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<title>BridgeCon Dashboard</title>
-
-	<!-- Bootstrap Core CSS -->
-	<link href="css/bootstrap.css" rel="stylesheet">
-	
-	<!-- Custom CSS -->
-	<link href="css/simple-sidebar.css" rel="stylesheet">
-	
-	<!-- DataTables JavaScript -->
-	<script type="text/javascript" charset="utf-8" src="DataTables/datatables.js"></script>
-	
-	<script>
-	$(document).ready(function()
-	{
-		function initialLoad(){
-			var id = "1";
-			$.ajax
-			({
-				type: 'POST',
-				url: 'get_scores.php',
-				data: {exhibit_select:id},
-				cache: false,
-				success: function(r)
-				{
-					$("#show_scores").html(r);
-				}
-			});
-		}
-		
-		initialLoad();
-		
-		$("#exhibit_number").change(function()
-		{
-			var id = $(this).val();
-			
-			$.ajax
-			({
-				type: 'POST',
-				url: 'get_scores.php',
-				data: {exhibit_select:id},
-				cache: false,
-				success: function(r)
-				{
-					$("#show_scores").html(r);
-				}
-			});
-		})
-	});
-	</script>
-
-</head>
-
-<body>
 
 	<div id="wrapper">
 
-		<!-- Sidebar -->
-		<div id="sidebar-wrapper">
-			<ul class="sidebar-nav">
-				<li class="sidebar-brand">
-					<a href="contestant.php">
-                        BridgeCon
-                    </a>
-				</li>
-				<li>
-					<a href="contestant.php">Contestants</a>
-				</li>
-				<li>
-					<a href="exhibit.php">Exhibits</a>
-				</li>
-				<li>
-					<a href="awards.php">Awards</a>
-				</li>
-				<li>
-                    <a href="score.php">Scores</a>
-                </li>
-				<li>
-					<a href="results.php">Results</a>
-				</li>
-			</ul>
-		</div>
-		<!-- /#sidebar-wrapper -->
+		<?php
+			include_once('navbar.php');
+		?>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
@@ -154,7 +59,7 @@
 								<b>Exhibit Score</b>
 							</div>
 							<div class="panel-body">
-								<form role="form" id="contestant_info" action="score.php" method="post" class="form-horizontal">
+								<form role="form" id="score_card" action="scores.php" method="post" class="form-horizontal">
 									<div class="form-group row">
 										<label class="col-md-2 control-label">Exhibit Number</label>
 										<div class="col-md-2">
@@ -237,6 +142,47 @@
 
     </div>
     <!-- /#wrapper -->
+	
+	<!-- AJAX script to populate exhibit scores based on
+		exhibit number drop-down menu -->
+	<script>
+	$(document).ready(function()
+	{
+		function initialLoad(){
+			var id = "1";
+			$.ajax
+			({
+				type: 'POST',
+				url: 'get_scores.php',
+				data: {exhibit_select:id},
+				cache: false,
+				success: function(r)
+				{
+					$("#show_scores").html(r);
+				}
+			});
+		}
+		
+		initialLoad();
+		
+		$("#exhibit_number").change(function()
+		{
+			var id = $(this).val();
+			
+			$.ajax
+			({
+				type: 'POST',
+				url: 'get_scores.php',
+				data: {exhibit_select:id},
+				cache: false,
+				success: function(r)
+				{
+					$("#show_scores").html(r);
+				}
+			});
+		})
+	});
+	</script>
 
     <!-- Menu Toggle Script -->
     <script>
@@ -245,16 +191,7 @@
         $("#wrapper").toggleClass("toggled");
     });
     </script>
-	
-	<!-- Initialize DataTables
-	<script>
-		
-	$(document).ready( function () {
-		$('#show_scores').DataTable();
-	} );
-	
-	</script>
- -->
+
 </body>
 
 </html>

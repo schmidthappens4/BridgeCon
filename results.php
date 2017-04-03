@@ -1,18 +1,6 @@
 <?php
-	require_once ('libs/MysqliDb.php');
+	require_once ('libs/config.php');
   
-	$hostname = "localhost";
-	$username = "bridgecon1";
-	$password = "Sp1d3rm@n";
-	$database = "test";
-	
-	$feedback = "";
-  
-	$event_data = array();
-  
-	$db = new MysqliDb ($hostname, $username, $password, $database);
-	$db->connect();
-	
 	if (isset($_POST['add_event']))
 	{
 		$event_data = Array(
@@ -34,65 +22,14 @@
 		}
 	}
 	
+	include_once('header.php');
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>BridgeCon Dashboard</title>
-
-    <!-- DataTables CSS -->
-	<link href="DataTables/datatables.min.css" rel="stylesheet">
-
-	<!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-	
-    <!-- Custom CSS -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
-
-	<!-- DataTables JavaScript -->
-	<script type="text/javascript" charset="utf-8" src="DataTables/datatables.js"></script>
-
-</head>
-
-<body>
 
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="contestant.php">
-                        BridgeCon
-                    </a>
-                </li>
-                <li>
-                    <a href="contestant.php">Contestants</a>
-                </li>
-                <li>
-                    <a href="exhibit.php">Exhibits</a>
-                </li>
-                <li>
-                    <a href="awards.php">Awards</a>
-                </li>
-				<li>
-                    <a href="score.php">Scores</a>
-                </li>
-                <li>
-                    <a href="results.php">Results</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
+        <?php
+			include_once('navbar.php');
+		?>
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
@@ -109,7 +46,7 @@
 						</h4>
 					</div>
                     <div class="col-md-12">
-                      <table id="contestant" class="display" cellspacing="0" width="100%">
+                      <table id="results" class="display" cellspacing="0" width="100%">
                         <thead>
                           <tr>
                             <th>Exhibit Number</th>
@@ -191,7 +128,7 @@
 	<script>
 		
 	$(document).ready( function () {
-		$('#contestant').DataTable();
+		$('#results').DataTable();
 	} );
 	
 	</script>

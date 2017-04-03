@@ -1,20 +1,14 @@
 <?php
-	require_once ('libs/MysqliDb.php');
+	require_once ('libs/config.php');
   
-	$hostname = "localhost";
-	$username = "bridgecon1";
-	$password = "Sp1d3rm@n";
-	$database = "test";
-	
-	$feedback = "";
-  
-	$exhibit_data = array();
-  
-	$db = new MysqliDb ($hostname, $username, $password, $database);
-	$db->connect();
+	/*Checks to see if a new exhibit has been submitted and
+	inserts exhibit info into the database*/
 	
 	if (isset($_POST['add_exhibit']))
 	{
+		/*Checks to see if the disqualified checkbox has been checked
+		and sets the disqualified flag to either YES or NO*/
+		
 		if (isset($_POST['exhibit_disqualified']))
 		{
 			$exhibit_disqualified = "Yes";
@@ -32,6 +26,7 @@
 		'detail_level_id' => $_POST['detail_level'],
 		'class_id' => $_POST['class'],
 		'contestant_event_id' => $_POST['contestant_number'],
+		'entry_fee' => $_POST['entry_fee'],
 		'exhibit_disqualified' => $exhibit_disqualified
 		);
 
@@ -46,59 +41,15 @@
 			$feedback =  'Oops, something went wrong! ' . $db->getLastError();
 		}
 	}
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<title>BridgeCon Dashboard</title>
-
-	<!-- Bootstrap Core CSS -->
-	<link href="css/bootstrap.css" rel="stylesheet">
 	
-	<!-- Custom CSS -->
-	<link href="css/simple-sidebar.css" rel="stylesheet">
-
-</head>
-
-<body>
+	include_once('header.php');
+?>
 
 	<div id="wrapper">
 
-		<!-- Sidebar -->
-		<div id="sidebar-wrapper">
-			<ul class="sidebar-nav">
-				<li class="sidebar-brand">
-					<a href="contestant.php">
-                        BridgeCon
-                    </a>
-				</li>
-				<li>
-					<a href="contestant.php">Contestants</a>
-				</li>
-				<li>
-					<a href="exhibit.php">Exhibits</a>
-				</li>
-				<li>
-					<a href="awards.php">Awards</a>
-				</li>
-				<li>
-                    <a href="score.php">Scores</a>
-                </li>
-				<li>
-					<a href="results.php">Results</a>
-				</li>
-			</ul>
-		</div>
-		<!-- /#sidebar-wrapper -->
+		<?php
+			include_once('navbar.php');
+		?>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
@@ -122,7 +73,7 @@
 								<b>Exhibit Info</b>
 							</div>
 							<div class="panel-body">
-								<form role="form" id="contestant_info" action="exhibit.php" method="post" class="form-horizontal">
+								<form role="form" id="contestant_info" action="exhibits.php" method="post" class="form-horizontal">
 									<div class="form-group row">
 										<label class="col-md-1 control-label">Number</label>
 										<div class="col-md-2">
@@ -198,7 +149,7 @@
 										</div>
 									</div>
 									<div class="form-group row">
-										<label class="col-md-3 col-md-offset-3 control-label">Contestant Number</label>
+										<label class="col-md-3 col-md-offset-2 control-label">Contestant Number</label>
 										<div class="col-md-2">
 											<select name="contestant_number" class="form-control">
 												<?php
@@ -212,6 +163,10 @@
 													}
 												?>
 											</select>
+										</div>
+										<label class="col-md-1 control-label">Entry Fee</label>
+										<div class="col-md-1">
+											<input type="text" name="entry_fee" placeholder="Entry Fee" class="form-control">
 										</div>
 									</div>
 									<div class="form-group has-error bg-danger row">

@@ -1,14 +1,6 @@
 <?php
-	require_once ('libs/MysqliDb.php');
+	require_once ('libs/config.php');
   
-	$hostname = "localhost";
-	$username = "bridgecon1";
-	$password = "Sp1d3rm@n";
-	$database = "test";
-	
-	$db = new MysqliDb ($hostname, $username, $password, $database);
-	$db->connect();
-	
 	$exhibit_selected = $_POST['exhibit_select'];
 	
 	$query = "(
