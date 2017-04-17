@@ -15,45 +15,56 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <h1 class="text-primary">Awards</h1>
+                        <h1 class="text-primary">Award Contenders</h1>
                     </div>
                     <div class="col-md-12">
-                      <table id="awards" class="display" cellspacing="0" width="100%">
+                      <table id="contenders" class="table-striped" cellspacing="0" width="100%">
                         <thead>
 							<tr>
 								<th>Award</th>
 								<th>Exhibit Title</th>
-								<th>Sponsor</th>
-								<th>Genre</th>
+								<th>Final Score</th>
                             </tr>
                         </thead>
                         <tbody>
                           <?php
-							$query = "(
-                            SELECT award.award_id, award.award_code, award.award_title, award_genre.award_genre, exhibit.exhibit_title, award_sponsor.award_sponsor FROM award_event
+							$contender_query = "(
+                            SELECT award.award_code, award.award_title, exhibit.exhibit_id, exhibit.exhibit_number, exhibit.exhibit_title FROM contender
                             LEFT JOIN award
-							ON award_event.award_id=award.award_id
+							ON contender.award_id=award.award_id
 							LEFT JOIN exhibit
-							ON award_event.exhibit_id=exhibit.exhibit_id
-							LEFT JOIN award_sponsor
-							ON award_event.award_sponsor_id=award_sponsor.award_sponsor_id
-							LEFT JOIN award_genre
-                            ON award.award_genre_id=award_genre.award_genre_id
+							ON contender.exhibit_id=exhibit.exhibit_id
+							ORDER BY award_title
                             )";
-                            
-                            $award_result = $db->rawQuery ($query);
+							
+                            $contender_result = $db->rawQuery ($contender_query);
+							
                             if ($db->count > 0)
-                            foreach ($award_result as $award)
+                            foreach ($contender_result as $contender)
                             {
-								$award_title = $award['award_code']." ".$award['award_title'];
-								$exhibit_title = $award['exhibit_title'];
-								$award_sponsor = $award['award_sponsor'];
-								$award_genre = $award['award_genre'];
+								
+								$cols = Array ("exhibit.exhibit_number", "exhibit.exhibit_title", "score.total_score");
+								$db->join("exhibit", "score.exhibit_id=exhibit.exhibit_id", "LEFT");
+								$db->where('exhibit_number', $contender['exhibit_number']);
+								$db->orderBy("exhibit_number", "ASC");
+								$db->orderBy("total_score", "ASC");
+								$exhibit_scores = $db->get('score', null, $cols);
+
+								if ($db->count == 5)
+								{
+									$final_score = $exhibit_scores[1]['total_score'] + $exhibit_scores[2]['total_score'] + $exhibit_scores[3]['total_score'];
+								}
+								else
+								{
+									$final_score = 'Pending';
+								}
+								
+								$award_title = $contender['award_code']." ".$contender['award_title'];
+								$exhibit_title = $contender['exhibit_title'];
 								echo '<tr>';
 								echo '<td>'.$award_title.'</td>';
 								echo '<td>'.$exhibit_title.'</td>';
-								echo '<td>'.$award_sponsor.'</td>';
-								echo '<td>'.$award_genre.'</td>';
+								echo '<td>'.$final_score.'</td>';
 								echo '</tr>';
                             }
                           ?>
@@ -80,7 +91,7 @@
 	<script>
 		
 	$(document).ready( function () {
-		$('#awards').DataTable( {
+		$('#contenders').DataTable( {
 			dom: 'Bfrtip',
 			buttons: [
 				'print', 'pdf'

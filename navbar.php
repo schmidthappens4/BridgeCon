@@ -2,7 +2,7 @@
 <div id="sidebar-wrapper">
 	<ul class="sidebar-nav">
 		<li class="sidebar-brand">
-			<a href="contestants.php">
+			<a href="index.php">
 				BridgeCon
 			</a>
 		</li>
@@ -17,6 +17,9 @@
 		</li>
 		<li>
 			<a href="scores.php">Scores</a>
+		</li>
+		<li>
+			<a href="contenders.php">Contenders</a>
 		</li>
 		<li>
 			<a href="results.php">Results</a>

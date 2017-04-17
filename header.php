@@ -20,6 +20,7 @@
     <!-- Custom CSS -->
     <link href="css/simple-sidebar.css" rel="stylesheet">
 
+
 	<!-- DataTables JavaScript -->
 	<script type="text/javascript" charset="utf-8" src="DataTables/datatables.js"></script>
 

@@ -52,6 +52,7 @@
                             <th>Exhibit Number</th>
                             <th>Exhibit Title</th>
                             <th>Final Score</th>
+							<th>Medal Level</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -62,7 +63,7 @@
                             ON score.exhibit_id=exhibit.exhibit_id
 							ORDER BY exhibit_number ASC
                             )";
-							
+							/*
 							$exhibit_scores_query = "(
 							SELECT exhibit.exhibit_number, exhibit.exhibit_title, score.total_score FROM score
                             LEFT JOIN exhibit
@@ -70,14 +71,13 @@
 							WHERE exhibit_number = ?
 							ORDER BY exhibit_number, total_score ASC
                             )";
-							
+							*/
                             $exhibits_result = $db->rawQuery ($number_of_exhibits_query);
 							
                             if ($db->count > 0)
 							
                             foreach ($exhibits_result as $exhibit)
                             {
-								
 								$cols = Array ("exhibit.exhibit_number", "exhibit.exhibit_title", "score.total_score");
 								$db->join("exhibit", "score.exhibit_id=exhibit.exhibit_id", "LEFT");
 								$db->where('exhibit_number', $exhibit['exhibit_number']);
@@ -88,6 +88,21 @@
 								if ($db->count == 5)
 								{
 									$final_score = $exhibit_scores[1]['total_score'] + $exhibit_scores[2]['total_score'] + $exhibit_scores[3]['total_score'];
+									switch ($final_score)
+									{
+										case ($final_score >= 30):
+											$medal_level = "Gold";
+											break;
+										case ($final_score >=24):
+											$medal_level = "Silver";
+											break;
+										case ($final_score >=18):
+											$medal_level = "Bronze";
+											break;
+										case ($final_score < 18):
+											$medal_level = "No Medal";
+											break;
+									}
 								}
 								else
 								{
@@ -102,6 +117,7 @@
 								echo '<td>'.$exhibit_number.'</td>';
 								echo '<td>'.$exhibit_title.'</td>';
 								echo '<td>'.$total_score.'</td>';
+								echo '<td>'.$medal_level.'</td>';
 								echo '</tr>';
                             }
                           ?>
@@ -128,7 +144,12 @@
 	<script>
 		
 	$(document).ready( function () {
-		$('#results').DataTable();
+		$('#results').DataTable( {
+			dom: 'Bfrtip',
+			buttons: [
+				'print', 'pdf'
+			]
+		} );
 	} );
 	
 	</script>

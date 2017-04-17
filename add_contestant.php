@@ -26,7 +26,7 @@
 							</div>
 							<div class="panel-body">
 								<form role="form" id="contestant_info" action="add_event.php" method="post" class="form-horizontal">
-									<div class="form-group row">
+									<div class="form-group required row">
 										<label class="col-md-2 control-label">First Name</label>
 										<div class="col-md-4">
 											<input type="text" name="first_name" placeholder="First Name" class="form-control">
@@ -94,6 +94,33 @@
 											<input type="text" name="email" placeholder="Email" class="form-control">
 										</div>
 									</div>
+									<div class="form-group row">
+										<label class="col-md-2 control-label">Contest Role</label>
+										<div class="col-md-3 radio">
+											<label>
+												<input type="radio" name="contest_role" value="contestant_only" onClick="displayForm(this)">
+												Individual will be a contestant only
+											</label>
+										</div>
+										<div class="col-md-3 radio">
+											<label>
+												<input type="radio" name="contest_role" value="contestant_judge" onClick="displayForm(this)">
+												Individual will be a contestant and judge
+											</label>
+										</div>
+										<div class="col-md-3 radio">
+											<label>
+												<input type="radio" name="contest_role" value="judge_only" onClick="displayForm(this)">
+												Individual will be a judge only
+											</label>
+										</div>
+									</div>
+									<div class="form-group row" id="judge_info" style="display:none">
+										<label class="col-md-3 control-label">Judge Number</label>
+										<div class="col-md-2">
+											<input type="text" name="judge_number" placeholder="Judge Number" class="form-control">
+										</div>
+									</div>
 								    <div class="form-group has-error bg-danger row">
 										<div class="col-md-10 col-md-offset-1">
 											<div class="checkbox">
@@ -129,6 +156,18 @@
         $("#wrapper").toggleClass("toggled");
     });
     </script>
+	
+	<!-- Script to toggle Judge Info div -->
+	<script>
+	function displayForm(c) {
+		if (c.value != "contestant_only") {
+			jQuery('#judge_info').show();
+		}
+		if (c.value == "contestant__only") {
+			jQuery('#judge_info').hide();
+		}
+	};
+	</script>
 
 </body>
 

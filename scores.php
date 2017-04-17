@@ -15,7 +15,7 @@
 		'total_score' => $_POST['total_score'],
 		'judge_id' => $_POST['judge_number']
 		);
-
+		
 		$id = $db->insert ('score', $score_data);
   
 		if ($id)
@@ -65,6 +65,7 @@
 										<div class="col-md-2">
 											<select id="exhibit_number" name="exhibit_number" class="form-control">
 												<?php
+													$db->orderBy("exhibit_number","ASC");
 													$exhibit_result = $db->get ("exhibit");
 													if ($db->count > 0)
 													foreach ($exhibit_result as $exhibit)
@@ -78,31 +79,31 @@
 										</div>
 										<label class="col-md-3 control-label">Construction Score</label>
 										<div class="col-md-2">
-											<input type="text" name="construction_score" placeholder="Construction" class="form-control">
+											<input type="text" name="construction_score" id="construction_score" placeholder="Construction" class="form-control" onChange="calculate_total(this.value, 'finish_score', 'accuracy_score', 'intangible_score', 'total_score')" />
 										</div>
 									</div>
 									<div class="form-group row">
 										<label class="col-md-3 col-md-offset-4 control-label">Finish Score</label>
 										<div class="col-md-2">
-											<input type="text" name="finish_score" placeholder="Finish" class="form-control">
+											<input type="text" name="finish_score" id="finish_score" placeholder="Finish" class="form-control" onChange="calculate_total(this.value, 'construction_score', 'accuracy_score', 'intangible_score', 'total_score')" />
 										</div>
 									</div>
 									<div class="form-group row">
 										<label class="col-md-3 col-md-offset-4 control-label">Accuracy Score</label>
 										<div class="col-md-2">
-											<input type="text" name="accuracy_score" placeholder="Accuracy" class="form-control">
+											<input type="text" name="accuracy_score" id="accuracy_score" placeholder="Accuracy" class="form-control" onChange="calculate_total(this.value, 'construction_score', 'finish_score', 'intangible_score', 'total_score')" />
 										</div>
 									</div>
 									<div class="form-group row">
 										<label class="col-md-3 col-md-offset-4 control-label">Intangible Score</label>
 										<div class="col-md-2">
-											<input type="text" name="intangible_score" placeholder="Intangible" class="form-control">
+											<input type="text" name="intangible_score" id="intangible_score" placeholder="Intangible" class="form-control" onChange="calculate_total(this.value, 'construction_score', 'finish_score', 'accuracy_score', 'total_score')" />
 										</div>
 									</div>
 									<div class="form-group row">
 										<label class="col-md-3 col-md-offset-4 control-label">Total Score</label>
 										<div class="col-md-2">
-											<input type="text" name="total_score" placeholder="Total" class="form-control">
+											<input type="text" name="total_score" id="total_score" readonly placeholder="Total" class="form-control" />
 										</div>
 									</div>
 									<div class="form-group row">
@@ -110,6 +111,7 @@
 										<div class="col-md-2">
 											<select name="judge_number" class="form-control">
 												<?php
+													$db->orderBy("judge_number","ASC");
 													$judge_result = $db->get ("judge");
 													if ($db->count > 0)
 													foreach ($judge_result as $judge)
@@ -145,11 +147,25 @@
 	
 	<!-- AJAX script to populate exhibit scores based on
 		exhibit number drop-down menu -->
+	<?php
+		if (isset($_POST['exhibit_number']))
+		{
+			$exhibit_id = $_POST['exhibit_number'];
+		}
+		else
+		{
+			$db->orderBy("exhibit_number","ASC");
+			$exhibit = $db->getOne ("exhibit");
+			
+			$exhibit_id = $exhibit['exhibit_id'];
+		}
+	?>
+	
 	<script>
 	$(document).ready(function()
 	{
 		function initialLoad(){
-			var id = "1";
+			var id = '<?php echo $exhibit_id; ?>';
 			$.ajax
 			({
 				type: 'POST',
@@ -184,6 +200,20 @@
 	});
 	</script>
 
+	<script>
+	function calculate_total(A, B, C, D, SUM) {
+		var one = Number(A);
+		if (isNaN(one)) { alert('Invalid entry: '+A); one=0; }
+		var two = Number(document.getElementById(B).value);
+		if (isNaN(two)) { alert('Invalid entry: '+B); two=0; }
+		var three = Number(document.getElementById(C).value);
+		if (isNaN(three)) { alert('Invalid entry: '+C); three=0; }
+		var four = Number(document.getElementById(D).value);
+		if (isNaN(four)) { alert('Invalid entry: '+D); four=0; }
+		document.getElementById(SUM).value = one + two + three + four;
+	}
+	</script>
+	
     <!-- Menu Toggle Script -->
     <script>
     $("#menu-toggle").click(function(e) {

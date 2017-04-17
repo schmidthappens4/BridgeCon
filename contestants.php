@@ -54,7 +54,7 @@
 						</h4>
 					</div>
                     <div class="col-md-12">
-                      <table id="contestant" class="display" cellspacing="0" width="100%">
+                      <table id="contestant" class="table-striped" cellspacing="0" width="100%">
                         <thead>
                           <tr>
                             <th>First Name</th>
@@ -127,7 +127,12 @@
 	<script>
 		
 	$(document).ready( function () {
-		$('#contestant').DataTable();
+		$('#contestant').DataTable( {
+			dom: 'Bfrtip',
+			buttons: [
+				'print', 'pdf'
+			]
+		} );
 	} );
 	
 	</script>

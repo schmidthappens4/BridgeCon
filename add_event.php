@@ -25,12 +25,32 @@
     'email' => $_POST['email'],
     'contestant_disqualified' => $contestant_disqualified
     );
-  
+	
 	$id = $db->insert ('contestant', $contestant_data);
  
 	if ($id)
 	{
 		$contestant_id = $id;
+		
+		if ($_POST['contest_role'] == "contestant_judge" || $_POST['contest_role'] == "judge_only")
+		{
+			$judge_data = Array(
+			'judge_number' => $_POST['judge_number'],
+			'contestant_id' => $contestant_id
+			);
+			
+			$judge_id = $db->insert ('judge', $judge_data);
+			
+			if ($judge_id)
+			{
+				header('Location: contestants.php');
+			}
+			else
+			{
+				echo 'Oops, judge not added to database! ' . $db->getLastError();
+			}
+			
+		}
 	}
 	else
 	{
@@ -61,7 +81,7 @@
 								<b>Contest Info</b>
 							</div>
 							<div class="panel-body">
-								<form role="form" id="event_info" action="contestant.php" method="post" class="form-horizontal">
+								<form role="form" id="event_info" action="contestants.php" method="post" class="form-horizontal">
 									<div class="form-group row">
 										<label class="col-md-3 control-label">Contestant ID</label>
 										<div class="col-md-2">
