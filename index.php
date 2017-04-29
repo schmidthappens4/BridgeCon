@@ -24,19 +24,19 @@
 							<b>BridgeCon Totals</b>
 						</div>
 						<div class="panel-body">
-							<div class="col-md-3 col-md-offset-1">
+							<div class="col-md-4">
 								<?php
 									$contestant_count = $db->getValue ("contestant", "COUNT(contestant_id)");
 									echo '<h4 class="text-primary">Contestant Total: ' . $contestant_count;
 								?>
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<?php
 									$entry_fee_total = $db->getValue ("exhibit", "SUM(entry_fee)");
 									echo '<h4 class="text-primary">Entry Fee Total: ' . number_format($entry_fee_total,2);
 								?>
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<?php
 									$exhibit_count = $db->getValue ("exhibit", "COUNT(exhibit_id)");
 									echo '<h4 class="text-primary">Exhibit Total: ' . $exhibit_count;
@@ -66,19 +66,24 @@
 									$class_name = $class['class'];
 								}
 							?>
-							<div class="col-md-3 col-md-offset-1">
+							<div class="col-md-3">
 								<?php
-									echo '<h4 class="text-primary">Junior: ' . $class_result[0]['class_total'];
+									echo '<h4 class="text-primary">'. $class_result[0]['class'] . ': ' . $class_result[0]['class_total'];
 								?>
 							</div>
 							<div class="col-md-3">
 								<?php
-									echo '<h4 class="text-primary">General: ' . $class_result[1]['class_total'];
+									echo '<h4 class="text-primary">'. $class_result[1]['class'] . ': ' . $class_result[1]['class_total'];
 								?>
 							</div>
 							<div class="col-md-3">
 								<?php
-									echo '<h4 class="text-primary">Advanced: ' . $class_result[2]['class_total'];
+									echo '<h4 class="text-primary">'. $class_result[2]['class'] . ': ' . $class_result[2]['class_total'];
+								?>
+							</div>
+							<div class="col-md-3">
+								<?php
+									echo '<h4 class="text-primary">'. $class_result[3]['class'] . ': ' . $class_result[3]['class_total'];
 								?>
 							</div>
 						</div>
@@ -148,22 +153,22 @@
                             }
 							?>
 
-							<div class="col-md-2 col-md-offset-1">
+							<div class="col-md-3">
 								<?php
 									echo '<h4 class="text-primary">Gold: ' . $gold_total;
 								?>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<?php
 									echo '<h4 class="text-primary">Silver: ' . $silver_total;
 								?>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<?php
 									echo '<h4 class="text-primary">Bronze: ' . $bronze_total;
 								?>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<?php
 									echo '<h4 class="text-primary">No Medal: ' . $no_medal_total;
 								?>
