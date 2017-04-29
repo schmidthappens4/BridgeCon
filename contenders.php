@@ -22,6 +22,7 @@
                         <thead>
 							<tr>
 								<th>Award</th>
+								<th>Exhibit Number</th>
 								<th>Exhibit Title</th>
 								<th>Final Score</th>
                             </tr>
@@ -60,9 +61,11 @@
 								}
 								
 								$award_title = $contender['award_code']." ".$contender['award_title'];
+								$exhibit_number = $contender['exhibit_number'];
 								$exhibit_title = $contender['exhibit_title'];
 								echo '<tr>';
 								echo '<td>'.$award_title.'</td>';
+								echo '<td>'.$exhibit_number.'</td>';
 								echo '<td>'.$exhibit_title.'</td>';
 								echo '<td>'.$final_score.'</td>';
 								echo '</tr>';
